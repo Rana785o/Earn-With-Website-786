@@ -142,8 +142,9 @@ letter-spacing:3px;
 
 <div class="plan" onclick="openPlan(50)">$50 Plan</div>
 <div class="plan" onclick="openPlan(100)">$100 Plan</div>
-<div class="plan" onclick="openPlan(200)">$300 Plan</div>
-<div class="plan" onclick="openPlan(300)">$400 Plan</div>
+<div class="plan" onclick="openPlan(200)">$200 Plan</div>
+<div class="plan" onclick="openPlan(300)">$300 Plan</div>
+<div class="plan" onclick="openPlan(400)">$400 Plan</div>
 <div class="plan" onclick="openPlan(500)">$500 Plan</div>
 <div class="plan" onclick="openPlan(600)">$600 Plan</div>
 <div class="plan" onclick="openPlan(700)">$700 Plan</div>
@@ -217,9 +218,13 @@ Share this link with your friends and earn rewards!
 <button class="depBtn" onclick="setAmt(this,5000)">$5000</button>
 <button class="depBtn" onclick="setAmt(this,10000)">$10000</button>
 
-<button id="usdtBtn" class="green hidden" onclick="openUSDT()">USDT BEP20</button>
 
-<button class="green">Confirm Deposit</button>
+
+<div id="usdtBtn" class="blue hidden">
+<button onclick="button()">USDT BEP20 ✔</button>
+</div>
+
+<button id="this" class="green overflow-" onclick="openUSDT()">Confirm Deposit</button>
 
 <button class="back" onclick="show('home')">Back</button>
 
@@ -288,7 +293,7 @@ let m=(d*30).toFixed(2);
 let t=(d*90).toFixed(2);
 document.getElementById("pTitle").innerText="$"+v+" Plan";
 document.getElementById("pData").innerHTML=`
-<p>Daily Profit: 8%</p>
+<p>Daily Profit 8%: (8% = $${d})</p>
 <p>Monthly Profit: $${m}</p>
 <p>3 Months Profit: $${t}</p>`;
 }
