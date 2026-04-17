@@ -314,7 +314,7 @@ https://rana785o.github.io/Earn-With-Website-786/
 <script>
 
 let capLogin="", capSignup="";
-let balance = 0;
+let balance = 50;
 
 let currentPlanValue = 0;
 
@@ -483,17 +483,27 @@ document.getElementById(id).classList.remove("hidden");
 
 /* ACTIVATION (NEW FEATURE) */
 function activatePlan(){
+
+// ❌ اگر balance 0 یا کم ہے
+if(balance <= 0 || balance < currentPlanValue){
+alert("Your balance is 0. Please deposit first.");
+return;
+}
+
+// ✅ اگر balance موجود ہے
 document.getElementById("loader").style.display="flex";
 
 setTimeout(()=>{
 document.getElementById("loader").style.display="none";
 
-alert("Package successfully activated");
+alert("Your plan successfully activated");
 
+// balance deduct
 balance = balance - currentPlanValue;
 updateBalance();
 
 show('home');
+
 },5000);
 }
 
