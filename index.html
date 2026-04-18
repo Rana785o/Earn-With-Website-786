@@ -103,8 +103,8 @@ color:#fff;
 <!-- LOGIN -->
 <div class="container" id="login">
 <h2>Login</h2>
-<input id="loginUser" placeholder="Username">
-<input id="loginPass" type="password" placeholder="Password">
+<input placeholder="Email / Phone">
+<input type="password" placeholder="Password">
 
 <div class="capBox" id="capLogin"></div>
 <input id="loginCap" placeholder="Enter Captcha">
@@ -131,7 +131,7 @@ Create Account
 <div class="capBox" id="capSignup"></div>
 <input id="signupCap" placeholder="Enter Captcha">
 
-<button class="green" onclick="signup()">Confirm Account</button>
+<button class="green" onclick="signup()">Create Account</button>
 
 <p onclick="showLogin()" style="text-align:center;color:#60a5fa;cursor:pointer">
 Back to Login
@@ -140,17 +140,9 @@ Back to Login
 
 <!-- HOME -->
 <div class="container hidden" id="home">
-<div>
-    <h1>
-        <b>
-            Earn-With-Website-786
-        </b>
-    </h1>
+
+<div class="balance" id="balanceHome">Balance: $0
 </div>
-
-<h3 id="welcomeUser"></h3>
-
-<div class="balance" id="balanceHome">Balance: $0</div>
 
 <div class="row">
 <button class="green" onclick="show('withdraw')">Withdraw</button>
@@ -354,18 +346,6 @@ function show(id){
 loading(()=>{
 document.querySelectorAll('.container').forEach(e=>e.classList.add('hidden'));
 document.getElementById(id).classList.remove('hidden');
-
-if(id === "home"){
-document.getElementById("welcomeUser").innerText =
-"Welcome 👉 " + currentUser;
-}
-
-// ⭐ FIX HERE (INVITE LINK UPDATE)
-if(id === "invite"){
-document.getElementById("refLink").innerText =
-"https://rana785o.github.io/Earn-With-Website-786/?ref=" + currentUser;
-}
-
 updateBalance();
 });
 }
@@ -381,27 +361,11 @@ document.getElementById('login').classList.remove('hidden');
 }
 
 function login(){
-
-let u = document.getElementById("loginUser").value.trim();
-let p = document.getElementById("loginPass").value.trim();
-let cap = document.getElementById("loginCap").value.trim();
-
-// ❌ EMPTY CHECK (MAIN RULE)
-if(!u || !p){
-alert("Please fill Username and Password first");
-return;
-}
-
-// ❌ CAPTCHA CHECK
-if(cap !== capLogin){
+if(document.getElementById("loginCap").value!==capLogin){
 alert("Wrong CAPTCHA");
 refreshCap();
 return;
 }
-
-// ✅ SUCCESS LOGIN
-currentUser = u;
-
 show('home');
 }
 
@@ -560,46 +524,26 @@ navigator.clipboard.writeText("0x951067dd4f164a3b72c93bc7f1a6dc980dd52a08");
 alert("Copied");
 }
 
-currentUser = u;
-console.log("LOGIN USER:", currentUser);
-
-function show(id){
-loading(()=>{
-document.querySelectorAll('.container').forEach(e=>e.classList.add('hidden'));
-document.getElementById(id).classList.remove('hidden');
-
-if(id === "home"){
-document.getElementById("welcomeUser").innerText = "Welcome 👉: " + currentUser;
+function showW(id){
+["bep","erc","trc"].forEach(i=>document.getElementById(i).classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
 }
 
-updateBalance();
-});
-}
 
 
 /* ACTIVATION (NEW FEATURE) */
 function activatePlan(){
-
-// ❌ اگر balance 0 یا کم ہے
-if(balance <= 0 || balance < currentPlanValue){
-alert("Your balance is 0. Please deposit first.");
-return;
-}
-
-// ✅ اگر balance موجود ہے
 document.getElementById("loader").style.display="flex";
 
 setTimeout(()=>{
 document.getElementById("loader").style.display="none";
 
-alert("Your plan successfully activated");
+alert("Package successfully activated");
 
-// balance deduct
 balance = balance - currentPlanValue;
 updateBalance();
 
 show('home');
-
 },5000);
 }
 
@@ -611,4 +555,3 @@ window.location.href="https://wa.me/923390139727";
 
 </body>
 </html>
-
