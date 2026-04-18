@@ -103,7 +103,7 @@ color:#fff;
 <!-- LOGIN -->
 <div class="container" id="login">
 <h2>Login</h2>
-<input placeholder="Email / Phone">
+<input placeholder="Username">
 <input type="password" placeholder="Password">
 
 <div class="capBox" id="capLogin"></div>
@@ -141,8 +141,15 @@ Back to Login
 <!-- HOME -->
 <div class="container hidden" id="home">
 
-<div class="balance" id="balanceHome">Balance: $0
+    <div style="background-color: #2f54d9bd;">
+    <h1>
+        <b>
+            Earn-With-Website-786
+        </b>
+    </h1>
 </div>
+
+<div class="balance" id="balanceHome">Balance: $0</div>
 
 <div class="row">
 <button class="green" onclick="show('withdraw')">Withdraw</button>
@@ -306,7 +313,7 @@ https://rana785o.github.io/Earn-With-Website-786/
 <!-- (kept same as your original) -->
 
 <script>
-
+let currentUser = "";
 let capLogin="", capSignup="";
 let balance = 0;
 
@@ -361,12 +368,49 @@ document.getElementById('login').classList.remove('hidden');
 }
 
 function login(){
-if(document.getElementById("loginCap").value!==capLogin){
+
+let inputs = document.querySelectorAll("#login input");
+
+let userOrEmail = inputs[0].value.trim();
+let pass = inputs[1].value.trim();
+let cap = document.getElementById("loginCap").value;
+
+// 🔴 EMPTY CHECK
+if(!userOrEmail){
+alert("Please enter Username");
+return;
+}
+
+if(!pass){
+alert("Please enter Password");
+return;
+}
+
+// 🔴 CAPTCHA CHECK
+if(cap !== capLogin){
 alert("Wrong CAPTCHA");
 refreshCap();
 return;
 }
+
+
+// ✅ SUCCESS
+currentUser = userOrEmail;
+
+// old welcome remove if exists
+let old = document.getElementById("welcomeBox");
+if(old) old.remove();
+
+document.getElementById("home").insertAdjacentHTML("afterbegin",
+`
+<div id="welcomeBox" style="background:#111;padding:10px;margin-bottom:10px;border-radius:8px;font-weight:bold;">
+Welcome👉:   ${currentUser}
+</div>
+`
+);
+
 show('home');
+// show('home');
 }
 
 function signup(){
@@ -517,7 +561,6 @@ show('home');
 
 }
 
-
 /* EXTRA */
 function copy(){
 navigator.clipboard.writeText("0x951067dd4f164a3b72c93bc7f1a6dc980dd52a08");
@@ -528,8 +571,6 @@ function showW(id){
 ["bep","erc","trc"].forEach(i=>document.getElementById(i).classList.add("hidden"));
 document.getElementById(id).classList.remove("hidden");
 }
-
-
 
 /* ACTIVATION (NEW FEATURE) */
 function activatePlan(){
@@ -549,6 +590,53 @@ show('home');
 
 function openSupport(){
 window.location.href="https://wa.me/923390139727";
+}
+
+function copyRef(){
+
+let linkElement = document.getElementById("refLink");
+
+// safe text extract
+let link = linkElement.textContent.trim();
+
+navigator.clipboard.writeText(link)
+.then(()=>{
+alert("Link copied successfully");
+})
+.catch(()=>{
+alert("Copy failed, please try again");
+});
+
+}
+
+function submitDeposit(){
+
+let txn = document.getElementById("txn").value.trim();
+let img = document.getElementById("proofImg").files.length;
+
+if(!txn){
+alert("Please enter Transaction ID");
+return;
+}
+
+if(img === 0){
+alert("Please upload payment proof image");
+return;
+}
+
+// loader start
+document.getElementById("loader").style.display = "flex";
+
+setTimeout(()=>{
+
+document.getElementById("loader").style.display = "none";
+
+alert("Your Deposit Successful\n(You will receive your withdrawal within 30 minutes to 24 hours)");
+
+show('home');
+
+},5000);
+
 }
 
 </script>
