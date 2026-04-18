@@ -1,4 +1,4 @@
-F<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -103,8 +103,8 @@ color:#fff;
 <!-- LOGIN -->
 <div class="container" id="login">
 <h2>Login</h2>
-<input placeholder="Email / Phone">
-<input type="password" placeholder="Password">
+<input id="loginUser" placeholder="Username">
+<input id="loginPass" type="password" placeholder="Password">
 
 <div class="capBox" id="capLogin"></div>
 <input id="loginCap" placeholder="Enter Captcha">
@@ -131,7 +131,7 @@ Create Account
 <div class="capBox" id="capSignup"></div>
 <input id="signupCap" placeholder="Enter Captcha">
 
-<button class="green" onclick="signup()">Create Account</button>
+<button class="green" onclick="signup()">Confirm Account</button>
 
 <p onclick="showLogin()" style="text-align:center;color:#60a5fa;cursor:pointer">
 Back to Login
@@ -147,6 +147,8 @@ Back to Login
         </b>
     </h1>
 </div>
+
+<h3 id="welcomeUser"></h3>
 
 <div class="balance" id="balanceHome">Balance: $0</div>
 
@@ -284,7 +286,7 @@ https://rana785o.github.io/Earn-With-Website-786/
 
 <div class="container hidden" id="withdraw">
 
-<div class="balance" id="balanceWithdraw">Balance: $8200</div>
+<div class="balance" id="balanceWithdraw">Balance: $0</div>
 
 <input id="wAmt" placeholder="Enter Amount">
 
@@ -352,6 +354,18 @@ function show(id){
 loading(()=>{
 document.querySelectorAll('.container').forEach(e=>e.classList.add('hidden'));
 document.getElementById(id).classList.remove('hidden');
+
+if(id === "home"){
+document.getElementById("welcomeUser").innerText =
+"Welcome 👉 " + currentUser;
+}
+
+// ⭐ FIX HERE (INVITE LINK UPDATE)
+if(id === "invite"){
+document.getElementById("refLink").innerText =
+"https://rana785o.github.io/Earn-With-Website-786/?ref=" + currentUser;
+}
+
 updateBalance();
 });
 }
@@ -367,17 +381,89 @@ document.getElementById('login').classList.remove('hidden');
 }
 
 function login(){
-if(document.getElementById("loginCap").value!==capLogin){
+
+let u = document.getElementById("loginUser").value.trim();
+let p = document.getElementById("loginPass").value.trim();
+let cap = document.getElementById("loginCap").value.trim();
+
+// ❌ EMPTY CHECK (MAIN RULE)
+if(!u || !p){
+alert("Please fill Username and Password first");
+return;
+}
+
+// ❌ CAPTCHA CHECK
+if(cap !== capLogin){
 alert("Wrong CAPTCHA");
 refreshCap();
 return;
 }
+
+// ✅ SUCCESS LOGIN
+currentUser = u;
+
 show('home');
 }
 
 function signup(){
-alert("Account Created Successfully");
-show('home');
+
+let u = document.getElementById("user").value.trim();
+let email = document.getElementById("email").value.trim();
+let phone = document.getElementById("phone").value.trim();
+let p = document.getElementById("pass").value;
+let cp = document.getElementById("cpass").value;
+let invite = document.getElementById("inviteInput") ? document.getElementById("inviteInput").value.trim() : "";
+let cap = document.getElementById("signupCap").value;
+
+// 🔴 EMPTY CHECK
+if(!u || !email || !phone || !p || !cp || !cap){
+alert("Please fill all fields");
+return;
+}
+
+// 🔴 USERNAME CHECK
+if(u.length < 3){
+alert("Username must be at least 3 characters");
+return;
+}
+
+// 🔴 EMAIL CHECK
+let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+if(!email.match(emailPattern)){
+alert("Invalid email format");
+return;
+}
+
+// 🔴 PHONE CHECK (numbers only)
+let phonePattern = /^[0-9]{10,15}$/;
+if(!phone.match(phonePattern)){
+alert("Enter valid phone number");
+return;
+}
+
+// 🔴 PASSWORD MATCH
+if(p !== cp){
+alert("Passwords do not match");
+return;
+}
+
+// 🔴 CAPTCHA CHECK
+if(cap !== capSignup){
+alert("Wrong CAPTCHA");
+refreshCap();
+return;
+}
+
+if(invite === ""){
+invite = "NO_INVITE";
+}
+
+// ✅ SUCCESS
+alert("Account successfully created");
+
+// 👉 واپس login page پر لے جاو
+showLogin();
+
 }
 
 /* PLAN */
@@ -474,11 +560,21 @@ navigator.clipboard.writeText("0x951067dd4f164a3b72c93bc7f1a6dc980dd52a08");
 alert("Copied");
 }
 
-function showW(id){
-["bep","erc","trc"].forEach(i=>document.getElementById(i).classList.add("hidden"));
-document.getElementById(id).classList.remove("hidden");
+currentUser = u;
+console.log("LOGIN USER:", currentUser);
+
+function show(id){
+loading(()=>{
+document.querySelectorAll('.container').forEach(e=>e.classList.add('hidden'));
+document.getElementById(id).classList.remove('hidden');
+
+if(id === "home"){
+document.getElementById("welcomeUser").innerText = "Welcome 👉: " + currentUser;
 }
 
+updateBalance();
+});
+}
 
 
 /* ACTIVATION (NEW FEATURE) */
@@ -515,3 +611,4 @@ window.location.href="https://wa.me/923390139727";
 
 </body>
 </html>
+
